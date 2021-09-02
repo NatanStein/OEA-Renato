@@ -1,32 +1,49 @@
+import struct
 import re
-import math
-intervalo = 72
-query = 99074570
-with open('cep_ordenado.dat') as file:
+
+reg = struct.Struct("72s72s72s72s2s8s2s")
+query = input("Digite o CEP para ser buscado: ")
+achou = False
+
+with open('Tarefa 5\\cep_ordenado.dat','rb') as file:
     
-    tamanho_linha = len(file.readline())
+    tamanho_linha = reg.size
     
     file.seek(0,2)
     tamanho_arquivo = file.tell()
-    num_linhas = int(tamanho_arquivo/300)
+    num_linhas = int(tamanho_arquivo/tamanho_linha)
 
-    fim = (num_linhas-1)
+    fim = (num_linhas)
     inicio = 0
     cont = 0
     while inicio <= fim:
         cont+=1
         meio = (inicio+fim)//2
         file.seek(meio*tamanho_linha,0)
-        linha = file.readline()
-        cep = int(linha[intervalo*4:].strip()[2:])
-        print(cep,inicio,meio,fim)
+        linha = file.read(tamanho_linha)
+        local = reg.unpack(linha)
+        cep = local[-2].decode()
         if query == cep:
-            linha = linha[:intervalo*4]
-            linha = re.sub('  +', ';',linha)
-            local = linha.split(";")
+            achou = True
+            break
         elif query > cep:
             inicio = meio + 1
         else:
             fim = meio - 1
+if achou:
 
- 
+    rua = re.sub('  +', '',local[0].decode())
+    bairro = re.sub('  +', '',local[1].decode())
+    cidade = re.sub('  +', '',local[2].decode())
+    estado = re.sub('  +', '',local[3].decode())
+    cep = re.sub('  +', '',local[4].decode()) + re.sub('  +', '',local[5].decode()) 
+
+    print(f"""
+    Rua: {rua} 
+    Bairro: {bairro} 
+    Cidade: {cidade} 
+    Estado: {estado} 
+    CEP: {cep}
+    """)
+else:
+    print(f"CEP {query} não foi encontrado!")
