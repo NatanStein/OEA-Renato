@@ -32,11 +32,11 @@ with open('Tarefa 5\\cep_ordenado.dat','rb') as file:
             fim = meio - 1
 if achou:
 
-    rua = re.sub('  +', '',local[0].decode())
-    bairro = re.sub('  +', '',local[1].decode())
-    cidade = re.sub('  +', '',local[2].decode())
-    estado = re.sub('  +', '',local[3].decode())
-    cep = re.sub('  +', '',local[4].decode()) + re.sub('  +', '',local[5].decode()) 
+    rua = re.sub('  +', '',local[0].decode('latin-1'))
+    bairro = re.sub('  +', '',local[1].decode('latin-1'))
+    cidade = re.sub('  +', '',local[2].decode('latin-1'))
+    estado = re.sub('  +', '',local[3].decode('latin-1'))
+    cep = re.sub('  +', '',local[4].decode('latin-1')) + re.sub('  +', '',local[5].decode('latin-1')) 
 
     print(f"""
     Rua: {rua} 
